@@ -14,29 +14,51 @@
 # ENVIRONMENT
 #--------------------------------------------------------------------
 
-# CI_ENVIRONMENT = production
+CI_ENVIRONMENT = development
 
 #--------------------------------------------------------------------
 # APP
 #--------------------------------------------------------------------
 
-# app.baseURL = ''
+app.baseURL = http://localhost/jasa_intro/public/
 # If you have trouble with `.`, you could also use `_`.
 # app_baseURL = ''
 # app.forceGlobalSecureRequests = false
 # app.CSPEnabled = false
 
 #--------------------------------------------------------------------
+# AI TOOL - remove.bg API
+# Daftar gratis di: https://www.remove.bg/api (50 kredit/bulan gratis)
+#--------------------------------------------------------------------
+
+REMOVEBG_API_KEY = mQ9fKJLSo5NoPiKKhEp9kMHD
+
+#--------------------------------------------------------------------
+# ADMIN PANEL - Login Credentials
+# Ganti username dan password di sini sebelum deploy ke cPanel!
+#--------------------------------------------------------------------
+
+ADMIN_USERNAME = brankey
+ADMIN_PASSWORD = brankey2025
+
+#--------------------------------------------------------------------
+# AI TOOL - PiAPI (untuk hapus BG video)
+# Daftar di: https://piapi.ai → Dashboard → API Key
+#--------------------------------------------------------------------
+
+PIAPI_API_KEY = c4bad89602b94cca2c9d7346203dab25285b911c91fa19be81db0b1a60a9507f
+
+#--------------------------------------------------------------------
 # DATABASE
 #--------------------------------------------------------------------
 
-# database.default.hostname = localhost
-# database.default.database = ci4
-# database.default.username = root
-# database.default.password = root
-# database.default.DBDriver = MySQLi
-# database.default.DBPrefix =
-# database.default.port = 3306
+database.default.hostname = localhost
+database.default.database = db_brankey_jasaintro
+database.default.username = root
+database.default.password = 
+database.default.DBDriver = MySQLi
+database.default.DBPrefix =
+database.default.port = 3306
 
 # If you use MySQLi as tests, first update the values of Config\Database::$tests.
 # database.tests.hostname = localhost
