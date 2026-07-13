@@ -46,10 +46,7 @@ CREATE TABLE IF NOT EXISTS `products` (
 CREATE TABLE IF NOT EXISTS `orders` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `nama_lengkap` varchar(150) NOT NULL,
-  `email` varchar(150) NULL,
-  `nomor_wa` varchar(50) NOT NULL,
-  `nama_channel` varchar(150) NULL,
-  `jenis_konten` varchar(100) NULL,
+  `nomor_wa` varchar(150) NOT NULL,
   `paket` varchar(150) NOT NULL,
   `harga` int(11) NOT NULL DEFAULT 0,
   `catatan` text NULL,

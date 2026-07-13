@@ -190,9 +190,9 @@
                         <?php foreach($orders as $o): ?>
                         <tr>
                             <td style="color: #9ca3af;">#<?= $o['id'] ?></td>
-                            <td style="font-weight: 500;"><?= esc($o['nama_klien']) ?></td>
-                            <td><?= esc($o['email']) ?></td>
-                            <td style="color: #00e5ff;"><?= esc($o['nama_intro']) ?></td>
+                            <td style="font-weight: 500;"><?= esc($o['nama_lengkap']) ?></td>
+                            <td><?= esc($o['nomor_wa']) ?></td>
+                            <td style="color: #00e5ff;"><?= esc($o['paket']) ?></td>
                             <td><span style="opacity: 0.8; font-size: 13px;"><?= esc($o['catatan']) ?></span></td>
                             <td><span class="status-badge"><?= esc($o['status']) ?></span></td>
                         </tr>

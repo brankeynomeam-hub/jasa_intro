@@ -4,7 +4,7 @@
 
 <div class="form-container glass-panel">
     <div style="text-align: center; margin-bottom: 30px;">
-        <video autoplay loop muted playsinline src="<?= base_url('videos/logo_header.mp4') ?>" style="height: 80px; margin-bottom: 15px; border-radius: 5px; background: #000;"></video>
+        <video autoplay loop muted playsinline preload="none" src="<?= base_url('videos/logo_header.mp4') ?>" style="height: 80px; margin-bottom: 15px; border-radius: 5px; background: #000;"></video>
         <h2>Form <span class="text-gradient">Pemesanan</span></h2>
         <p style="color: var(--text-muted); font-size: 0.9rem;">Lengkapi data di bawah ini untuk memproses pesanan intro YouTube kamu.</p>
     </div>

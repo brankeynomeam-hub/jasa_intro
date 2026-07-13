@@ -2,17 +2,49 @@
 
 namespace App\Controllers;
 
+use App\Models\ProductModel;
+
+/**
+ * Home Controller
+ * Menampilkan halaman utama katalog produk.
+ */
 class Home extends BaseController
 {
-    public function index()
+    protected ProductModel $productModel;
+
+    public function __construct()
     {
-        $productModel = new \App\Models\ProductModel();
-        
-        $data['intros']    = $productModel->where('kategori', 'intro')->findAll();
-        $data['overlays']  = $productModel->where('kategori', 'overlay')->findAll();
-        $data['ccs']       = $productModel->where('kategori', 'cc')->findAll();
-        $data['watermarks']= $productModel->where('kategori', 'watermark')->findAll();
-        $data['gratis']    = $productModel->where('kategori', 'gratis')->findAll();
+        $this->productModel = new ProductModel();
+    }
+
+    public function index(): string
+    {
+        // Ambil semua produk sekaligus, lalu kelompokkan per kategori di PHP
+        // Lebih efisien daripada 5 query terpisah
+        $allProducts = $this->productModel->findAll();
+
+        $data = [
+            'intros'     => [],
+            'overlays'   => [],
+            'ccs'        => [],
+            'watermarks' => [],
+            'gratis'     => [],
+        ];
+
+        $map = [
+            'intro'     => 'intros',
+            'overlay'   => 'overlays',
+            'cc'        => 'ccs',
+            'watermark' => 'watermarks',
+            'gratis'    => 'gratis',
+        ];
+
+        foreach ($allProducts as $product) {
+            $kategori = $product['kategori'] ?? '';
+            if (isset($map[$kategori])) {
+                $data[$map[$kategori]][] = $product;
+            }
+        }
 
         return view('home', $data);
     }

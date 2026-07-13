@@ -22,103 +22,44 @@ class AiTool extends BaseController
             return redirect()->to('/ai-tool');
         }
 
-        // Validasi file upload
+        // Gunakan UploadService untuk menangani file
         $file = $this->request->getFile('gambar');
-        if (!$file || !$file->isValid()) {
-            return $this->response->setJSON([
-                'status'  => 'error',
-                'message' => 'File tidak valid. Silakan upload ulang.'
-            ]);
-        }
-
-        // Cek ekstensi
-        $allowedTypes = ['jpg', 'jpeg', 'png', 'webp'];
-        if (!in_array(strtolower($file->getExtension()), $allowedTypes)) {
-            return $this->response->setJSON([
-                'status'  => 'error',
-                'message' => 'Format file tidak didukung. Gunakan JPG, PNG, atau WEBP.'
-            ]);
-        }
-
-        // Cek ukuran max 10MB
-        if ($file->getSize() > 10 * 1024 * 1024) {
-            return $this->response->setJSON([
-                'status'  => 'error',
-                'message' => 'Ukuran file maksimal 10MB.'
-            ]);
-        }
-
-        // Simpan file original sementara
+        $uploadService = new \App\Services\UploadService();
         $uploadPath = WRITEPATH . 'uploads/ai_tool/';
-        if (!is_dir($uploadPath)) {
-            mkdir($uploadPath, 0755, true);
-        }
+        
+        $uploadResult = $uploadService->handleUpload(
+            $file,
+            $uploadPath,
+            ['jpg', 'jpeg', 'png', 'webp'],
+            10485760, // 10MB
+            'logo_' // prefix
+        );
 
-        $fileName   = uniqid('logo_', true);
-        $origName   = $fileName . '.' . $file->getExtension();
-        $file->move($uploadPath, $origName);
-
-        // Ambil API Key dari .env
-        $apiKey = env('REMOVEBG_API_KEY', '');
-        if (empty($apiKey)) {
-            // Mode demo: tidak ada API key, kembalikan pesan error
+        if (!$uploadResult['success']) {
             return $this->response->setJSON([
                 'status'  => 'error',
-                'message' => 'API Key remove.bg belum dikonfigurasi. Tambahkan REMOVEBG_API_KEY di file .env'
+                'message' => $uploadResult['message']
             ]);
         }
 
-        // Pilihan orientasi dari user
+        $origName = $uploadResult['file_name'];
+        $origPath = $uploadPath . $origName;
+        $noBgName = pathinfo($origName, PATHINFO_FILENAME) . '_nobg.png';
+        $noBgPath = $uploadPath . $noBgName;
+
+        // Pilihan orientasi dari user (tidak terpakai secara langsung untuk API ini, tapi disiapkan)
         $orientasi = $this->request->getPost('orientasi') ?? 'landscape';
-        if ($orientasi === 'portrait') {
-            $kompW = 1080;
-            $kompH = 1920;
-        } else {
-            $kompW = 1920;
-            $kompH = 1080;
-        }
 
-        // ======================================
-        // Panggil remove.bg API
-        // ======================================
-        $origPath  = $uploadPath . $origName;
-        $noBgName  = $fileName . '_nobg.png';
-        $noBgPath  = $uploadPath . $noBgName;
+        // Panggil AiService untuk remove background
+        $aiService = new \App\Services\AiService();
+        $aiResult = $aiService->removeBackground($origPath, $noBgPath);
 
-        $ch = curl_init();
-        curl_setopt_array($ch, [
-            CURLOPT_URL            => 'https://api.remove.bg/v1.0/removebg',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST           => true,
-            CURLOPT_POSTFIELDS     => [
-                'image_file' => new \CURLFile($origPath),
-                'size'       => 'auto',
-            ],
-            CURLOPT_HTTPHEADER     => [
-                'X-Api-Key: ' . $apiKey,
-            ],
-        ]);
-
-        $response   = curl_exec($ch);
-        $httpCode   = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $curlError  = curl_error($ch);
-        curl_close($ch);
-
-        if ($curlError || $httpCode !== 200) {
-            // Decode error message jika JSON
-            $errMsg = 'Gagal menghapus background.';
-            $decoded = json_decode($response, true);
-            if (isset($decoded['errors'][0]['title'])) {
-                $errMsg .= ' ' . $decoded['errors'][0]['title'];
-            }
+        if (!$aiResult['success']) {
             return $this->response->setJSON([
                 'status'  => 'error',
-                'message' => $errMsg . ' (HTTP ' . $httpCode . ')'
+                'message' => $aiResult['message']
             ]);
         }
-
-        // Simpan hasil PNG tanpa background
-        file_put_contents($noBgPath, $response);
 
         // Copy gambar no-BG ke public agar bisa di-preview
         $publicPreviewPath = FCPATH . 'uploads/ai_tool/';
