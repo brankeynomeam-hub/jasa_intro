@@ -310,8 +310,7 @@
                     </video>
                     <?php else: ?>
                     <img src="<?= base_url('images/cc/' . rawurlencode($efx['file'])) ?>"
-                         alt="<?= esc($name) ?>"
-                         loading="lazy"
+                         alt="<?= $efx['file'] ?>"
                          style="width:100%;border-radius:12px;display:block;">
                     <?php endif; ?>
                 </div>
@@ -411,7 +410,6 @@
                 <div class="package-video" style="aspect-ratio:auto;background:transparent;">
                     <img src="<?= base_url('images/watermarks/' . $wm) ?>"
                          alt="Contoh Watermark <?= $num ?>"
-                         loading="lazy"
                          style="width:100%;border-radius:12px;display:block;">
                 </div>
                 <ul class="package-features">

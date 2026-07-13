@@ -18,7 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="<?= base_url('css/style.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('css/style.css?v=' . time()) ?>">
 
     <!-- Preloader keyframes (harus synchronous agar tidak FOUC) -->
     <style>
@@ -68,10 +68,7 @@
     ============================================================ -->
     <header>
         <div class="logo-text d-flex align-center gap-10">
-            <video autoplay loop muted playsinline preload="none"
-                   src="<?= base_url('videos/logo_header.mp4') ?>"
-                   style="height:42px;border-radius:5px;background:#000;">
-            </video>
+            <img src="<?= base_url('images/logo_baru.png') ?>" alt="Brankey Logo" style="height:42px;border-radius:5px;">
             <span style="color:#fff;">Brankey</span>
             <span class="text-gradient">Store</span>
         </div>

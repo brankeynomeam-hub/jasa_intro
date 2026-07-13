@@ -373,7 +373,8 @@ footer {
     100% { background-position: -200% 0; }
 }
 
-.package-video video {
+.package-video video,
+.package-video img {
     width: 100%;
     height: 100%;
     object-fit: cover;
